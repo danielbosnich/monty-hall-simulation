@@ -62,7 +62,7 @@ def main():
             num_monty_wins += 1
             continue
 
-        # Change the chosen door, if we're changing our selection
+        # Change the chosen door - if we're changing our selection
         if change_selection:
             chosen_door = possible_doors[0]
 
@@ -73,37 +73,35 @@ def main():
 
 
     # Calculate winning percentage
-    winning_percentage = num_wins / num_simulations * 100
+    win_percentage = num_wins / num_simulations * 100
 
     # Calculate winning percentage when giving the chance to switch
-    change_winning_percentage = num_wins / (num_simulations - num_monty_wins) * 100
+    change_win_percentage = num_wins / (num_simulations - num_monty_wins) * 100
 
     if change_selection:
         logging.info("Given %i simulations, the chance of winning when "
                      "changing door selection is %.3f %%",
                      num_simulations,
-                     winning_percentage)
+                     win_percentage)
         logging.info("Given %i simulations, the chance of winning when "
                      "given the chance to change door selection, and choosing "
                      "to change door selection, is %.3f %%",
                      num_simulations,
-                     change_winning_percentage)
+                     change_win_percentage)
     else:
         logging.info("Given %i simulations, the chance of winning when "
                      "not changing door selection is %.3f %%",
                      num_simulations,
-                     winning_percentage)
+                     win_percentage)
         logging.info("Given %i simulations, the chance of winning when given "
                      "the chance to change door selection, and not choosing "
                      "to change door selection, is %.3f %%",
                      num_simulations,
-                     change_winning_percentage)
+                     change_win_percentage)
 
     # Calculate program execution time
     end_time = time.time()
-    #execution_time = round(end_time - start_time, 3)
     execution_time = end_time - start_time
-
     logging.debug("It took the program %.3f seconds to run", execution_time)
 
     # Close the logger
