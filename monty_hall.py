@@ -1,65 +1,49 @@
 """
-Monty Hall Simulation
-
-Created on Sat May  4 11:26:39 2019
-
-@author: danielb
+Monty Hall Problem simulation
 """
 
-import random
+import argparse
 import logging
+import random
 import time
 
-def main():
-    """Run the Monty Hall Problem simulation"""
+
+def run_simulation(change_selection):
+    """Runs the Monty Hall Problem simulation
+
+    Args:
+        change_selection (bool): If the door selection should be changed
+    """
     # Simulation variables
-    num_simulations = 10000
-    change_selection = True
+    num_simulations = 100_000
     num_wins = 0
 
-    # Seed the random number generator
-    random.seed()
-
-    # Start time
+    # Simulation start time
     start_time = time.time()
 
-    # Start up logging
-    logging.basicConfig(format='[%(asctime)s] %(levelname)s : %(message)s',
-                        level=logging.INFO)
-
     # Run the simulation
-    for i in range(num_simulations):
-        logging.debug("Running simulation number %i", i)
+    for _ in range(num_simulations):
+        # Randomly pick a door to be the prize door and then also randomly
+        # choose a door for the game and remove that door from possible_doors
         possible_doors = [0, 1, 2]
-        prize_door = random.randint(0, 2)
-        logging.debug("The prize is located in door: %i", prize_door)
-        chosen_door = random.randint(0, 2)
-        logging.debug("The chosen door is: %i", chosen_door)
-
-        # Remove the chosen door from the list of possible doors
+        prize_door = random.choice(possible_doors)
+        chosen_door = random.choice(possible_doors)
         possible_doors.remove(chosen_door)
-        logging.debug("The remaining two doors are: %i and %i",
-                      possible_doors[0], possible_doors[1])
 
         # Monty Hall picks a door
         if prize_door in possible_doors:
             for door in possible_doors:
                 if door != prize_door:
                     montys_door = door
-            possible_doors.remove(montys_door)
-            logging.debug("Monty Hall chose door: %i", montys_door)
         else:
-            montys_door_index = random.randint(0, 1)
-            montys_door = possible_doors[montys_door_index]
-            possible_doors.remove(montys_door)
-            logging.debug("Monty Hall chose door: %i", montys_door)
+            montys_door = random.choice(possible_doors)
+        possible_doors.remove(montys_door)
 
         # Change the chosen door, if we're changing our selection
         if change_selection:
             chosen_door = possible_doors[0]
 
         # Check if we picked the winning door and update the win counter
-        logging.debug("The final door chosen is door: %i", chosen_door)
         if chosen_door == prize_door:
             num_wins += 1
 
@@ -67,23 +51,49 @@ def main():
     winning_percentage = num_wins / num_simulations * 100
 
     if change_selection:
-        logging.info("Given %i simulations, the chance of winning when "
-                     "changing door selection is %.3f %%",
-                     num_simulations,
-                     winning_percentage)
+        logging.info(f'Given {num_simulations:,} simulations, the chance of '
+                     f'winning when changing door selection is '
+                     f'{winning_percentage:.2f} %')
     else:
-        logging.info("Given %i simulations, the chance of winning when "
-                     "not changing door selection is %.3f %%",
-                     num_simulations,
-                     winning_percentage)
+        logging.info(f'Given {num_simulations:,} simulations, the chance of '
+                     f'winning when not changing door selection is '
+                     f'{winning_percentage:.2f} %')
 
     # Calculate program execution time
-    end_time = time.time()
-    execution_time = end_time - start_time
-    logging.debug("It took the program %.3f seconds to run", execution_time)
+    execution_time = time.time() - start_time
+    logging.debug(f'It took the program {execution_time:.3f} seconds to run')
 
-    # Close the logger
+
+def parse_args():
+    """Parses the passed argument. In order to set the boolean value, one of
+    the two optional arguments should be specified. If neither argument is
+    used, True will be returned
+
+    Returns:
+        (bool): If the door selection should be changed
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--keep_selection',
+                        dest='change_selection',
+                        action='store_false',
+                        help='Keep the door selection')
+    parser.add_argument('--change_selection',
+                        dest='change_selection',
+                        action='store_true',
+                        help='Change the door selection')
+    return parser.parse_args().change_selection
+
+
+def main():
+    """Sets up logging and starts the simulation"""
+    logging.basicConfig(format='[%(asctime)s] %(levelname)s : %(message)s',
+                        level=logging.INFO)
+
+    change_selection = parse_args()
+    run_simulation(change_selection)
+
     logging.shutdown()
+
 
 if __name__ == '__main__':
     main()
