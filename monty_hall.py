@@ -15,7 +15,7 @@ def run_simulation(change_selection):
         change_selection (bool): If the door selection should be changed
     """
     # Simulation variables
-    num_simulations = 100_000
+    num_simulations = 500_000
     num_wins = 0
 
     # Simulation start time
