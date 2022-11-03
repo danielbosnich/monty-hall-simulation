@@ -7,7 +7,7 @@ In the Monty Hall problem there are three possible doors, two of which contain n
 
 
 # Variation
-The variation on the Monty Hall problem is different in that Monty Hall no longer chooses the non-prize door when the prize door is still available.  Instead, he will randomly pick from the remaining two doors, even if that means he picks the winning door, at which point the game is over.  This simulation aims to answer the following question: when Monty Hall doesn't pick the winning door, is it still advantageous to switch doors?
+The variation on the Monty Hall problem is different in that Monty Hall no longer chooses the non-prize door when the prize door is still available.  Instead, he will randomly pick from the remaining two doors, even if that means he picks the winning door, at which point the game is over.  This simulation aims to answer the following question: when Monty Hall does _not_ pick the winning door, is it still advantageous to switch?
 
 
 # Usage and Output
